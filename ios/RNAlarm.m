@@ -174,16 +174,18 @@ RCT_EXPORT_METHOD(setAlarm:(NSString *)triggerTime
         if(musicUri == nil) {
             content.sound = [UNNotificationSound defaultSound];
         }else {
-            NSFileManager *fileManage = NSFileManager.defaultManager;
-            
-            NSURL *libraryUrl = [[fileManage URLsForDirectory:NSLibraryDirectory inDomains:NSUserDomainMask] objectAtIndex:0];
-            NSURL *soundDirUrl = [libraryUrl URLByAppendingPathComponent:@"Sounds"];
-            [fileManage createDirectoryAtURL:soundDirUrl withIntermediateDirectories:TRUE attributes:nil error:nil];
-            
-            NSURL *from = [NSURL fileURLWithPath:@"/Library/Ringtones/Constellation.m4r"];
-            NSURL *dest = [soundDirUrl URLByAppendingPathComponent:musicUri];
-            [fileManage copyItemAtURL:from toURL:dest error:nil];
-            
+            musicUri = [musicUri stringByAppendingString:@".mp3"];
+          
+//            NSFileManager *fileManage = NSFileManager.defaultManager;
+          
+//            NSURL *libraryUrl = [[fileManage URLsForDirectory:NSLibraryDirectory inDomains:NSUserDomainMask] objectAtIndex:0];
+//            NSURL *soundDirUrl = [libraryUrl URLByAppendingPathComponent:@"Sounds"];
+//            [fileManage createDirectoryAtURL:soundDirUrl withIntermediateDirectories:TRUE attributes:nil error:nil];
+//
+//            NSURL *from = [NSURL fileURLWithPath:@"/Library/Ringtones/Constellation.m4r"];
+//            NSURL *dest = [soundDirUrl URLByAppendingPathComponent:musicUri];
+//            [fileManage copyItemAtURL:from toURL:dest error:nil];
+          
             content.sound = [UNNotificationSound soundNamed:musicUri];
         }
         //   NSTimeInterval time =[triggerTime doubleValue];
@@ -218,7 +220,7 @@ RCT_EXPORT_METHOD(setAlarm:(NSString *)triggerTime
             
             UNNotificationAction *action = [UNNotificationAction
                                             actionWithIdentifier:@"clear.repeat.action"
-                                            title:@"关闭"
+                                            title:@"Timer has elapsed."
                                             options:UNNotificationActionOptionForeground];
             UNNotificationCategory *category = [UNNotificationCategory
                                                 //categoryWithIdentifier:@"RNAlarmCategory"
