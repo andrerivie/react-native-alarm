@@ -13,7 +13,7 @@
 - (int)getAlarmStatus:(NSString *)triggerTime {
   NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
   NSString *strStatus = [userDefault objectForKey:triggerTime];
-  
+
   if (strStatus == nil) {
     return -1;
   } else {
@@ -25,30 +25,30 @@
        willPresentNotification:(UNNotification *)notification
          withCompletionHandler:
 (void (^)(UNNotificationPresentationOptions))completionHandler {
-  
+
   completionHandler(UNNotificationPresentationOptionAlert |
                     UNNotificationPresentationOptionSound);
-  
+
   AudioServicesPlayAlertSoundWithCompletion(kSystemSoundID_Vibrate, nil);
 }
 
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center
 didReceiveNotificationResponse:(UNNotificationResponse *)response
          withCompletionHandler:(void (^)())completionHandler {
-  
+
   NSString *categoryIdentifier =
   response.notification.request.content.categoryIdentifier;
   NSString *identifier1 = [categoryIdentifier stringByAppendingString:@"1"];
   NSString *identifier2 = [categoryIdentifier stringByAppendingString:@"2"];
   NSString *identifier3 = [categoryIdentifier stringByAppendingString:@"3"];
-  
+
   [center removePendingNotificationRequestsWithIdentifiers:@[
                                                              identifier1, identifier2, identifier3
                                                              ]];
   [center removeDeliveredNotificationsWithIdentifiers:@[
                                                         identifier1, identifier2, identifier3
                                                         ]];
-  
+
   completionHandler();
 }
 
@@ -70,7 +70,7 @@ RCT_EXPORT_METHOD(clearAlarm) {
 
 RCT_EXPORT_METHOD(initAlarm:successCallback
                   : (RCTResponseSenderBlock)callback) {
-  
+
   UNUserNotificationCenter *rCenter =
   UNUserNotificationCenter.currentNotificationCenter;
   [rCenter
@@ -96,17 +96,13 @@ RCT_EXPORT_METHOD(initAlarm:successCallback
 
 RCT_EXPORT_METHOD(setAlarm
                   : (NSString *)triggerTime title
-                  : (NSString *)title isRetry
-                  : (NSString *)isRetry musicUri
+                  : (NSString *)title musicUri
                   : (NSString *)musicUri successCallback
                   : (RCTResponseSenderBlock)successCallback errorCallback
                   : (RCTResponseSenderBlock)errorCallback) {
   @try {
     int alarmStatus = [self getAlarmStatus:triggerTime];
-    if (isRetry != nil && ![isRetry isEqual:@""]) {
-      [self setAlarm:triggerTime andStatus:nil];
-    }
-    
+
     bool isSettedAlarm = [NSNumber numberWithInt:alarmStatus].boolValue;
     if (alarmStatus != -1) {
       if (isSettedAlarm) {
@@ -123,7 +119,7 @@ RCT_EXPORT_METHOD(setAlarm
         }
       }
     }
-    
+
     UNUserNotificationCenter *rCenter =
     UNUserNotificationCenter.currentNotificationCenter;
     [rCenter requestAuthorizationWithOptions:(UNAuthorizationOptionAlert |
@@ -137,35 +133,35 @@ RCT_EXPORT_METHOD(setAlarm
     content.body = [NSString localizedUserNotificationStringForKey:title
                                                          arguments:nil];
     content.categoryIdentifier = triggerTime;
-    
+
     if (musicUri == nil) {
       content.sound = [UNNotificationSound defaultSound];
     } else {
       musicUri = [musicUri stringByAppendingString:@".mp3"];
       content.sound = [UNNotificationSound soundNamed:musicUri];
     }
-    
+
     NSDate *date = [NSDate date];
     double nowSeconds = [date timeIntervalSince1970];
-    
+
     double startDate = [triggerTime doubleValue];
-    
+
     double intervalSeconds = startDate / 1000 - nowSeconds;
     if (intervalSeconds > 0) {
-      
+
       UNTimeIntervalNotificationTrigger *trigger =
       [UNTimeIntervalNotificationTrigger
        triggerWithTimeInterval:intervalSeconds
        repeats:NO];
-      
+
       UNNotificationRequest *request = [UNNotificationRequest
                                         requestWithIdentifier:[triggerTime stringByAppendingString:@"1"]
                                         content:content
                                         trigger:trigger];
-      
+
       UNUserNotificationCenter *center =
       [UNUserNotificationCenter currentNotificationCenter];
-      
+
       UNNotificationAction *action = [UNNotificationAction
                                       actionWithIdentifier:@"clear.repeat.action"
                                       title:@"Timer has elapsed."
@@ -177,7 +173,7 @@ RCT_EXPORT_METHOD(setAlarm
                                           intentIdentifiers:@[]
                                           options:
                                           UNNotificationCategoryOptionCustomDismissAction];
-      
+
       [center
        setNotificationCategories:[NSSet setWithObjects:category, nil]];
       [center addNotificationRequest:request
@@ -186,23 +182,23 @@ RCT_EXPORT_METHOD(setAlarm
                    @throw error;
                  }
                }];
-      
+
       center.delegate = self;
       [self setAlarm:triggerTime andStatus:@"success"];
-      
+
       NSArray *result = [NSArray arrayWithObjects:@"0", nil];
       if (successCallback != nil) {
         successCallback(result);
       }
     } else {
       [self setAlarm:triggerTime andStatus:@"error"];
-      
+
       NSArray *result = [NSArray arrayWithObjects:@"0", nil];
       if (errorCallback != nil) {
         errorCallback(result);
       }
     }
-    
+
   } @catch (NSException *exception) {
     NSLog(@"%@", exception.reason);
     NSArray *result =
