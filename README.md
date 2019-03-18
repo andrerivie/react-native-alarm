@@ -30,7 +30,7 @@ Most of this should be handled by react-native link above, but verify the follow
 3. Append the following lines to `android/settings.gradle`:
 ```
 include ':react-native-alarm'
-project(':react-native-alarm').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-alarm/android')
+project(':react-native-alarm').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-alarm/android')
 ```
 4. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
 ```
