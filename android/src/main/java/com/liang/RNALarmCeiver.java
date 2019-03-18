@@ -77,7 +77,7 @@ public class RNALarmCeiver extends BroadcastReceiver {
         @Override
         public void onPrepared(MediaPlayer mp) {
           player.start();
-          new CountDownTimer(50000, 10000) {
+          new CountDownTimer(10000, 1000) {
             public void onTick(long millisUntilFinished) {}
             public void onFinish() {
               if (player.isPlaying()) {
@@ -90,7 +90,11 @@ public class RNALarmCeiver extends BroadcastReceiver {
       });
 
     } catch (IOException e) {
-      soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+        e.printStackTrace();
+        Log.e("EXCEPTION","IO_EXCEPTION"+e);
+    } catch (Exception e) {
+        e.printStackTrace();
+        Log.e("EXCEPTION","EXCEPTION:"+e)
     }
   }
 }
