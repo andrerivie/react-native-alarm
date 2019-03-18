@@ -94,7 +94,7 @@ public class RNALarmCeiver extends BroadcastReceiver {
         Log.e("EXCEPTION","IO_EXCEPTION"+e);
     } catch (Exception e) {
         e.printStackTrace();
-        Log.e("EXCEPTION","EXCEPTION:"+e)
+        Log.e("EXCEPTION","EXCEPTION:"+e);
     }
   }
 }
