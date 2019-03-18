@@ -1,6 +1,6 @@
 # react-native-alarm
 
-This project was forked from the abandoned react-native-alarm and refactored/updated to work with Android API 26+ (and below) and iOS. The use case is something like an alarm clock feature where you want the user to be able to mute other notifications/ringer and still wake device/notify/make a sound (using media volume) from your app at a specific time.
+This project was forked from (a fork of) the abandoned react-native-alarm and refactored/updated to work with Android API 26+ (and below) and iOS. The use case is something like an alarm clock feature where you want the user to be able to mute other notifications/ringer and still wake device/notify/make a sound (using media volume) from your app at a specific time.
 
 ## Getting started
 
