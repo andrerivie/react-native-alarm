@@ -39,12 +39,10 @@ implementation project(':react-native-alarm')
 
 ## Usage
 ```javascript
-import RNAlarm from 'react-native-alarm';
-
-// Example:
 RNAlarm.setAlarm(
+  'Alarm fire time'  // string in unix epoch time
   'Notification Title',
-  'custom_sound',
+  'custom_sound',  // a filename for a .mp3 that needs to be added to Android/iOS projects separately
   () => {
     // Success callback function
   },
@@ -53,3 +51,18 @@ RNAlarm.setAlarm(
   }
 );
 ```
+EXAMPLE:
+```javascript
+import RNAlarm from 'react-native-alarm';
+
+RNAlarm.setAlarm(
+  (Date.now() + 60000).toString(),  // alarm will fire in one minute (60000 milliseconds)
+  'Timer has elapsed!',
+  'my_custom_sound_file',   // leave this as empty string for default sound
+  () => {
+    console.log('Success!')
+  },
+  () => {
+    console.log('Failure!')
+  }
+);
