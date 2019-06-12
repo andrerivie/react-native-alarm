@@ -101,4 +101,13 @@ public class RNAlarmModule extends ReactContextBaseJavaModule {
         }
       }
   }
+
+  @ReactMethod
+  public void clearAlarm() {
+    Intent intent = new Intent(RNAlarmConstants.REACT_NATIVE_ALARM);
+    intent.setClass(reactContext, RNALarmCeiver.class);
+    PendingIntent pendingIntent = PendingIntent.getBroadcast(reactContext, 101, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    AlarmManager alarmManager = (AlarmManager) reactContext.getSystemService(Context.ALARM_SERVICE);
+    alarmManager.cancel(pendingIntent);
+  }
 }
