@@ -38,6 +38,7 @@ implementation project(':react-native-alarm')
 ```
 
 ## Usage
+to set the alarm:
 ```javascript
 RNAlarm.setAlarm(
   'Alarm fire time'  // string in unix epoch time
@@ -51,7 +52,11 @@ RNAlarm.setAlarm(
   }
 );
 ```
-EXAMPLE:
+to cancel the alarm:
+```javascript
+RNAlarm.clearAlarm()
+```
+## Example
 ```javascript
 import RNAlarm from 'react-native-alarm';
 
